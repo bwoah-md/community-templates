@@ -7,8 +7,8 @@ file="$config_dir/themes/noctalia.config"
 prefs="$config_dir/prefs_user.config"
 tmp="${file}.tmp"
 
-[[ -f "$file" ]] || {
-    echo "Sioyek theme file not found: $file" >&2
+[[ -f "$prefs" ]] || {
+    echo "Sioyek config not found: $prefs" >&2
     exit 1
 }
 
@@ -35,8 +35,5 @@ done < "$file" > "$tmp"
 mv "$tmp" "$file"
 
 # Make sure Sioyek loads the generated theme.
-mkdir -p "$config_dir"
-touch "$prefs"
-
 grep -Eq '^source[[:space:]]+.*sioyek/themes/noctalia\.config$' "$prefs" || \
-    printf '\nsource ~/.config/sioyek/themes/noctalia.config\n' >> "$prefs"
+    printf '\nsource %s\n' "$file" >> "$prefs"
